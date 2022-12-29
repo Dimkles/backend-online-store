@@ -16,8 +16,8 @@ export class ProductsController {
 
     @ApiOperation({ summary: 'Создание товара' })
     @ApiResponse({ status: 200, type: Product })
-    @Roles('ADMIN')
-    @UseGuards(RolesGuard)
+    // @Roles('ADMIN')
+    // @UseGuards(RolesGuard)
     @Post()
     @UseInterceptors(FileInterceptor('image'))
     create(@Body() dto: CreateProductsDto, @UploadedFile() image) {

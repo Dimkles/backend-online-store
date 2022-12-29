@@ -9,8 +9,8 @@ export class CreateProductsDto {
     readonly detailDescription: string
     @ApiProperty({ example: 1200, description: 'Цена товара' })
     readonly price: number
-    @ApiProperty({ example: 1200, description: 'Изображение' })
-    readonly image: File
+    @ApiProperty({ example: 1200, description: 'Изображение формата jpg' })
+    readonly image: any
     @ApiProperty({ example: " [1,2,3,4] or '1, 2, 3, 4' ", description: 'ID категорий, в троку через запятую, либо массив цифр' })
     readonly categories: number[] | string
 }

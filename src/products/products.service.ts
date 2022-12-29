@@ -20,7 +20,7 @@ export class ProductsService {
     }
 
     async createProduct(dto: CreateProductsDto, image: File) {
-        const { imagejpg, imagewebp } = await this.fileService.createFile(dto.image)
+        const { imagejpg, imagewebp } = await this.fileService.createFile(image)
         const product = await this.productsRepositiry.create({ ...dto, imagewebp, imagejpg })
         if (typeof dto.categories === 'string') {
             const categories = dto.categories.split(',')

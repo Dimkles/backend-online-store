@@ -13,8 +13,8 @@ export class CategoriesController {
 
     @ApiOperation({ summary: 'Создание категории' })
     @ApiResponse({ status: 200, type: Category })
-    @Roles('ADMIN')
-    @UseGuards(RolesGuard)
+    // @Roles('ADMIN')
+    // @UseGuards(RolesGuard)
     @Post()
     create(@Body() dto: CreateCategoryDto) {
         return this.categoriesService.createCategory(dto)
