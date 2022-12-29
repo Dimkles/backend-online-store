@@ -16,6 +16,8 @@ import { Category } from './categories/categories.model';
 import { Product } from './products/products.model';
 import { CategoryProduct } from './categories/category-product.model';
 import { Token } from './auth/token.model';
+import { BasketModule } from './basket/basket.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { Token } from './auth/token.model';
     AuthModule,
     FilesModule,
     CategoriesModule,
+    BasketModule,
+    OrdersModule,
 
   ],
   controllers: [],
