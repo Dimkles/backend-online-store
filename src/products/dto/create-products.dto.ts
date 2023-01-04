@@ -1,12 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger"
 
 export class CreateProductsDto {
-    @ApiProperty({ example: 'Карты', description: 'Название товара' })
+    @ApiProperty({ example: 'Роза английская кустовая', description: 'Название товара' })
     readonly name: string
-    @ApiProperty({ example: 'Какое-то описание', description: 'Краткое описание товара' })
-    readonly briefDescription: string
-    @ApiProperty({ example: 'Какое-то описание', description: 'Подробное описание товара' })
-    readonly detailDescription: string
+    @ApiProperty({ example: 'Какое-то описание', description: 'описание товара' })
+    readonly description: string
     @ApiProperty({ example: 1200, description: 'Цена товара' })
     readonly price: number
     @ApiProperty({ example: 1200, description: 'Изображение формата jpg' })

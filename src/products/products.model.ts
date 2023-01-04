@@ -5,8 +5,7 @@ import { Category } from "src/categories/categories.model";
 
 interface ProductsCreationAttrs {
     name: string
-    briefDescription: string
-    detailDescription: string
+    description: string
     link: string
     imagejpg: string
     imagewebp: string
@@ -22,12 +21,9 @@ export class Product extends Model<Product, ProductsCreationAttrs> {
     @Column({ type: DataType.STRING, allowNull: false })
     name: string
 
-    @ApiProperty({ example: 'Какое-то описание', description: 'Краткое описание товара' })
+    @ApiProperty({ example: 'Какое-то описание', description: 'описание товара' })
     @Column({ type: DataType.TEXT, allowNull: false })
-    briefDescription: string
-    @ApiProperty({ example: 'Какое-то описание', description: 'Подробное описание товара' })
-    @Column({ type: DataType.TEXT, allowNull: false })
-    detailDescription: string
+    description: string
 
     @ApiProperty({ example: 1200, description: 'Цена' })
     @Column({ type: DataType.INTEGER, allowNull: false })

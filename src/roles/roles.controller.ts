@@ -11,16 +11,16 @@ export class RolesController {
     constructor(private rolesService: RolesService) { }
 
     @ApiOperation({ summary: 'Создание роли' })
-    @Roles('ADMIN')
-    @UseGuards(RolesGuard)
+    // @Roles('ADMIN')
+    // @UseGuards(RolesGuard)
     @Post()
     create(@Body() dto: CreateRoleDto) {
         return this.rolesService.createRole(dto)
     }
 
     @ApiOperation({ summary: 'Получение роли по названию' })
-    @Roles('ADMIN')
-    @UseGuards(RolesGuard)
+    // @Roles('ADMIN')
+    // @UseGuards(RolesGuard)
     @Get('/:value')
     getByValue(@Param('value') value: string) {
         return this.rolesService.getRoleByValue(value)

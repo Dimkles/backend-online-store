@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { BasketService } from 'src/basket/basket.service';
 import { RolesService } from 'src/roles/roles.service';
 import { AddRoleDto } from './dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
@@ -10,13 +11,16 @@ import { User } from './users.model';
 export class UsersService {
 
     constructor(@InjectModel(User) private userRepository: typeof User,
-        private rolesService: RolesService) { }
+        private rolesService: RolesService, private basketService: BasketService) { }
 
     async createUser(dto: CreateUserDto) {
         const user = await this.userRepository.create(dto)
-        const role = await this.rolesService.getRoleByValue('USER')
+        const role = await this.rolesService.getRoleByValue('ADMIN')
         await user.$set('roles', [role.id])
+        const basket = await this.basketService.createBasket({ userId: user.id })
         user.roles = [role]
+        user.basketId = basket.id
+        await user.save()
         return user
     }
     async getAllUsers() {
