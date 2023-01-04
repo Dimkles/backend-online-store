@@ -18,6 +18,7 @@ export class Basket extends Model<Basket, BasketCreationAttrs> {
     @ApiProperty({ example: 1, description: 'id пользователя' })
     @Column({ type: DataType.INTEGER, unique: true })
     userId: number
+
     @BelongsToMany(() => Product, () => BasketProduct)
     products: Product[]
 }

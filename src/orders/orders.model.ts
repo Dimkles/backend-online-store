@@ -7,7 +7,7 @@ interface OrderCreationAttrs {
     name: string
 }
 
-@Table({ tableName: 'categories' })
+@Table({ tableName: 'orders' })
 export class Order extends Model<Order, OrderCreationAttrs> {
     @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
     @Column({ type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true })
