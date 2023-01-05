@@ -8,6 +8,6 @@ export class BasketController {
 
     @Post()
     create(@Body() dto: AddProductDto) {
-        return this.basketService.addProduct(dto)
+        return this.basketService.addProductToBasket(dto)
     }
 }

@@ -20,6 +20,8 @@ import { BasketModule } from './basket/basket.module';
 import { OrdersModule } from './orders/orders.module';
 import { Basket } from './basket/basket.model';
 import { BasketProduct } from './basket/basket-product.model';
+import { Order } from './orders/orders.model';
+import { OrderProduct } from './orders/orders-products.model';
 
 @Module({
   imports: [
@@ -37,7 +39,7 @@ import { BasketProduct } from './basket/basket-product.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, Token, UserRoles, Category, Product, CategoryProduct, Basket, BasketProduct],
+      models: [User, Role, Token, UserRoles, Category, Product, CategoryProduct, Basket, BasketProduct, Order, OrderProduct],
       sync: { force: true, alter: true },
       autoLoadModels: true,
     }),
