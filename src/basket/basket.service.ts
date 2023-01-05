@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Product } from 'src/products/products.model';
 import { ProductsService } from 'src/products/products.service';
 import { Basket } from './basket.model';
 import { AddProductDto } from './dto/add-product.dto';
 import { CreateBasketDto } from './dto/create-basket.dto';
+import { RemoveProductDto } from './dto/remove-product.dto';
 
 @Injectable()
 export class BasketService {
@@ -17,14 +17,34 @@ export class BasketService {
     }
 
     async addProductToBasket(dto: AddProductDto) {
-        const basket = await this.basketRepository.findByPk(dto.basketId)
+        const basket = await this.basketRepository.findByPk(dto.basketId, { include: { all: true } })
         const product = await this.productService.getProductById(dto.productId)
-        console.log(basket)
         if (product && basket) {
-            basket.products.push(product)
+
+            await basket.$add('products', product, { through: { quantity: dto.quantity } });
             const basketnew = await this.basketRepository.findByPk(dto.basketId, { include: { all: true } })
             return basketnew
         }
+    }
 
+    async removeProductToBasket(dto: RemoveProductDto) {
+        const basket = await this.basketRepository.findByPk(dto.basketId)
+        const product = await this.productService.getProductById(dto.productId)
+        if (basket && product) {
+            const productIndex = basket.products.indexOf(product)
+            if (productIndex >= 0) {
+                basket.products.splice(productIndex, 1)
+                await basket.save()
+                return basket
+            }
+        }
+    }
+    async removeAllProductToBasket(basketId: number) {
+        const basket = await this.basketRepository.findByPk(basketId)
+        if (basket) {
+            basket.products.length = 0
+            await basket.save()
+            return basket
+        }
     }
 }

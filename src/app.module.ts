@@ -40,7 +40,6 @@ import { OrderProduct } from './orders/orders-products.model';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       models: [User, Role, Token, UserRoles, Category, Product, CategoryProduct, Basket, BasketProduct, Order, OrderProduct],
-      sync: { force: true, alter: true },
       autoLoadModels: true,
     }),
     UsersModule,
