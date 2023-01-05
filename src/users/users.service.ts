@@ -19,7 +19,7 @@ export class UsersService {
         await user.$set('roles', [role.id])
         const basket = await this.basketService.createBasket({ userId: user.id })
         user.roles = [role]
-        user.$set('baskets', basket.id)
+        user.$set('basket', basket.id)
         return user
     }
     async getAllUsers() {

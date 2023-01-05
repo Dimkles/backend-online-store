@@ -35,9 +35,7 @@ export class User extends Model<User, UserCreationAttrs> {
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[]
 
-    // @BelongsTo(() => Basket)
-    // basket: Basket
-    @HasMany(() => Basket)
-    baskets: Basket;
+    @HasOne(() => Basket)
+    basket: Basket;
 
 }
