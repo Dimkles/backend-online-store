@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasOne, Model, Table } from "sequelize-typescript";
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
 import { Product } from "src/products/products.model";
 import { User } from "src/users/users.model";
 import { BasketProduct } from "./basket-product.model";
@@ -18,6 +18,9 @@ export class Basket extends Model<Basket, BasketCreationAttrs> {
     @ApiProperty({ example: 1, description: 'id пользователя' })
     @Column({ type: DataType.INTEGER, unique: true })
     userId: number
+
+    @BelongsTo(() => User)
+    user: User
 
     @BelongsToMany(() => Product, () => BasketProduct)
     products: Product[]
