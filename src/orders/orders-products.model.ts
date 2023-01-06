@@ -16,4 +16,7 @@ export class OrderProduct extends Model<OrderProduct> {
     @ForeignKey(() => Order)
     @Column({ type: DataType.INTEGER })
     orderId: number
+
+    @Column({ type: DataType.INTEGER })
+    quantity: number
 }

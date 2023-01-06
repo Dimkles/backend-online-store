@@ -4,6 +4,8 @@ import { CategoryProduct } from "src/categories/category-product.model";
 import { Category } from "src/categories/categories.model";
 import { Order } from "src/orders/orders.model";
 import { OrderProduct } from "src/orders/orders-products.model";
+import { Basket } from "src/basket/basket.model";
+import { BasketProduct } from "src/basket/basket-product.model";
 
 interface ProductsCreationAttrs {
     name: string
@@ -44,4 +46,7 @@ export class Product extends Model<Product, ProductsCreationAttrs> {
 
     @BelongsToMany(() => Order, () => OrderProduct)
     orders: Order[]
+
+    @BelongsToMany(() => Basket, () => BasketProduct)
+    baskets: Basket[]
 }

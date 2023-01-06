@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { async } from 'rxjs';
 import { ProductsService } from 'src/products/products.service';
+import { BasketProduct } from './basket-product.model';
 import { Basket } from './basket.model';
 import { AddProductDto } from './dto/add-product.dto';
 import { CreateBasketDto } from './dto/create-basket.dto';
@@ -11,11 +12,20 @@ import { RemoveProductDto } from './dto/remove-product.dto';
 @Injectable()
 export class BasketService {
     constructor(@InjectModel(Basket) private basketRepository: typeof Basket,
+        @InjectModel(BasketProduct) private basketProductsRepository: typeof BasketProduct,
         private productService: ProductsService) { }
 
     async createBasket(dto: CreateBasketDto) {
         const basket = await this.basketRepository.create(dto)
         return basket
+    }
+
+    async getBasket(id: number) {
+        return await this.basketRepository.findByPk(id, { include: { all: true } })
+    }
+
+    async getQuantityProduct(basketId: number, productId: number) {
+        return (await this.basketProductsRepository.findOne({ where: { basketId, productId } })).quantity
     }
 
     async addProductToBasket(dto: AddProductDto) {

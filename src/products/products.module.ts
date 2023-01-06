@@ -9,12 +9,14 @@ import { FilesModule } from 'src/files/files.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { OrderProduct } from 'src/orders/orders-products.model';
 import { Order } from 'src/orders/orders.model';
+import { Basket } from 'src/basket/basket.model';
+import { BasketProduct } from 'src/basket/basket-product.model';
 
 @Module({
   providers: [ProductsService],
   controllers: [ProductsController],
   imports: [
-    SequelizeModule.forFeature([Category, Product, CategoryProduct, Order, OrderProduct]),
+    SequelizeModule.forFeature([Category, Product, CategoryProduct, Order, OrderProduct, Basket, BasketProduct]),
     FilesModule,
     forwardRef(() => AuthModule)
   ],

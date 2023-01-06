@@ -5,7 +5,8 @@ import { User } from "src/users/users.model";
 import { OrderProduct } from "./orders-products.model";
 
 interface OrderCreationAttrs {
-    userId: number
+    userId: number,
+    addres: string
 }
 
 @Table({ tableName: 'orders' })
@@ -18,6 +19,9 @@ export class Order extends Model<Order, OrderCreationAttrs> {
     @ApiProperty({ example: 3, description: 'Id пользователя' })
     @Column({ type: DataType.INTEGER, allowNull: false })
     userId: number
+
+    @Column({ type: DataType.STRING })
+    addres: string
 
     @BelongsTo(() => User)
     user: User
