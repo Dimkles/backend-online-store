@@ -9,6 +9,8 @@ import { UserRoles } from "src/roles/user-roles.model";
 interface UserCreationAttrs {
     email: string
     password: string
+    address: string
+    name: string
 }
 
 @Table({ tableName: 'users' })
@@ -32,6 +34,14 @@ export class User extends Model<User, UserCreationAttrs> {
     @ApiProperty({ example: 'За хулиганство', description: 'Причина бана' })
     @Column({ type: DataType.STRING, allowNull: true })
     banReason: string
+
+    @ApiProperty({ example: 'г.Москва, ул.Пушкина, д.4, кв.4', description: 'Адрес пользователя' })
+    @Column({ type: DataType.STRING, allowNull: true })
+    address: string
+
+    @ApiProperty({ example: 'Дмитрий', description: 'Имя пользователя' })
+    @Column({ type: DataType.STRING, allowNull: true })
+    name: string
 
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[]

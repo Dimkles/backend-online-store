@@ -6,7 +6,7 @@ import { OrderProduct } from "./orders-products.model";
 
 interface OrderCreationAttrs {
     userId: number,
-    addres: string
+    address: string
 }
 
 @Table({ tableName: 'orders' })
@@ -21,7 +21,7 @@ export class Order extends Model<Order, OrderCreationAttrs> {
     userId: number
 
     @Column({ type: DataType.STRING })
-    addres: string
+    address: string
 
     @BelongsTo(() => User)
     user: User

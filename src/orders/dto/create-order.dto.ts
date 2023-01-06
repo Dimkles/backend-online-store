@@ -6,6 +6,5 @@ import { User } from 'src/users/users.model'
 export class CreateOrderDto {
     @ApiProperty({ example: 1, description: 'id пользователя' })
     readonly basketId: number
-    readonly userId: number
     readonly address: string
 }
