@@ -27,19 +27,15 @@ export class BasketService {
         }
     }
 
-    async removeProductToBasket(dto: RemoveProductDto) {
+    async removeProductFromBasket(dto: RemoveProductDto) {
         const basket = await this.basketRepository.findByPk(dto.basketId)
         const product = await this.productService.getProductById(dto.productId)
         if (basket && product) {
-            const productIndex = basket.products.indexOf(product)
-            if (productIndex >= 0) {
-                basket.products.splice(productIndex, 1)
-                await basket.save()
-                return basket
-            }
+            await basket.$remove('products', product.id)
+            return basket
         }
     }
-    async removeAllProductToBasket(basketId: number) {
+    async removeAllProductFromBasket(basketId: number) {
         const basket = await this.basketRepository.findByPk(basketId)
         if (basket) {
             basket.products.length = 0
