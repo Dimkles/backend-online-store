@@ -25,7 +25,7 @@ export class OrdersService {
                 await order.$add('products', product.id, { through: { quantity } })
             })
             await this.basketService.removeAllProductFromBasket({ basketId: basket.id })
-            return this.getOrderByPk(order.id)
+            return order
         }
     }
 

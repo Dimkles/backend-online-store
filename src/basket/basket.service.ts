@@ -19,8 +19,9 @@ export class BasketService {
         return basket
     }
 
-    async getBasket(id: number) {
-        return await this.basketRepository.findByPk(id, { include: { all: true } })
+    async getBasket(basketId: number) {
+        const basket = await this.basketRepository.findByPk(basketId, { include: { all: true } })
+        return basket
     }
 
     async getQuantityProduct(basketId: number, productId: number) {
@@ -31,9 +32,8 @@ export class BasketService {
         const basket = await this.basketRepository.findByPk(dto.basketId, { include: { all: true } })
         const product = await this.productService.getProductById(dto.productId)
         if (product && basket) {
-
             await basket.$add('products', product, { through: { quantity: dto.quantity } });
-            const basketnew = await this.basketRepository.findByPk(dto.basketId, { include: { all: true } })
+            const basketnew = await this.getBasket(basket.id)
             return basketnew
         }
     }

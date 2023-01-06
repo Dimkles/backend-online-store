@@ -13,6 +13,7 @@ interface ProductsCreationAttrs {
     link: string
     imagejpg: string
     imagewebp: string
+    quantity: number
 }
 
 @Table({ tableName: 'products' })
@@ -33,6 +34,10 @@ export class Product extends Model<Product, ProductsCreationAttrs> {
     @Column({ type: DataType.INTEGER, allowNull: false })
     price: number
 
+    @ApiProperty({ example: 12, description: 'Количество' })
+    @Column({ type: DataType.INTEGER, allowNull: false })
+    quantity: number
+
     @ApiProperty({ example: 'imageName.jpg', description: 'Изображение в формате jpg' })
     @Column({ type: DataType.STRING, allowNull: false })
     imagejpg: string
@@ -49,4 +54,6 @@ export class Product extends Model<Product, ProductsCreationAttrs> {
 
     @BelongsToMany(() => Basket, () => BasketProduct)
     baskets: Basket[]
+
+
 }
