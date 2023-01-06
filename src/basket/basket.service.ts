@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { async } from 'rxjs';
 import { ProductsService } from 'src/products/products.service';
 import { Basket } from './basket.model';
 import { AddProductDto } from './dto/add-product.dto';
 import { CreateBasketDto } from './dto/create-basket.dto';
+import { RemoveAllProductDto } from './dto/remove-all-product.dto';
 import { RemoveProductDto } from './dto/remove-product.dto';
 
 @Injectable()
@@ -35,12 +37,16 @@ export class BasketService {
             return basket
         }
     }
-    async removeAllProductFromBasket(basketId: number) {
-        const basket = await this.basketRepository.findByPk(basketId)
+    async removeAllProductFromBasket(dto: RemoveAllProductDto) {
+        const basket = await this.basketRepository.findByPk(dto.basketId, { include: { all: true } })
         if (basket) {
-            basket.products.length = 0
-            await basket.save()
-            return basket
+            if (basket.products) {
+                basket.products.forEach(async (product) =>
+                    await basket.$remove('products', product.id)
+                )
+            }
+            const basketnew = await this.basketRepository.findByPk(dto.basketId, { include: { all: true } })
+            return basketnew
         }
     }
 }
