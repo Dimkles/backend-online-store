@@ -40,7 +40,7 @@ export class BasketService {
     async removeAllProductFromBasket(dto: RemoveAllProductDto) {
         const basket = await this.basketRepository.findByPk(dto.basketId, { include: { all: true } })
         if (basket) {
-            if (basket.products) {
+            if (basket.products.length) {
                 basket.products.forEach(async (product) =>
                     await basket.$remove('products', product.id)
                 )
