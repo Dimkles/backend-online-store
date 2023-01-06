@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { async } from 'rxjs';
 import { ProductsService } from 'src/products/products.service';
 import { BasketProduct } from './basket-product.model';
 import { Basket } from './basket.model';

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-
 import { BasketService } from 'src/basket/basket.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './orders.model';
