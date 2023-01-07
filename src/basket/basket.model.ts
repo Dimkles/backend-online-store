@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
 import { Product } from "src/products/products.model";
 import { User } from "src/users/users.model";
 import { BasketProduct } from "./basket-product.model";
@@ -21,6 +21,7 @@ export class Basket extends Model<Basket, BasketCreationAttrs> {
 
     @BelongsTo(() => User)
     user: User
+
 
     @BelongsToMany(() => Product, () => BasketProduct)
     products: Product[]

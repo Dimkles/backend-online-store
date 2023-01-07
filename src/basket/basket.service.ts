@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Sequelize, } from 'sequelize-typescript';
+import { Product } from 'src/products/products.model';
 import { ProductsService } from 'src/products/products.service';
 import { BasketProduct } from './basket-product.model';
 import { Basket } from './basket.model';
@@ -7,12 +9,25 @@ import { AddProductDto } from './dto/add-product.dto';
 import { CreateBasketDto } from './dto/create-basket.dto';
 import { RemoveAllProductDto } from './dto/remove-all-product.dto';
 import { RemoveProductDto } from './dto/remove-product.dto';
-
+export interface getBasketItemsResult {
+    basketId: number,
+    userId: number,
+    products: {
+        basketId: number
+        productId: number;
+        productName: string;
+        price: number;
+        quantity: number;
+        imagejpg: string
+        imagewebp: string
+    }[]
+}
 @Injectable()
 export class BasketService {
     constructor(@InjectModel(Basket) private basketRepository: typeof Basket,
         @InjectModel(BasketProduct) private basketProductsRepository: typeof BasketProduct,
-        private productService: ProductsService) { }
+        private productService: ProductsService,
+        private sequelize: Sequelize) { }
 
     async createBasket(dto: CreateBasketDto) {
         const basket = await this.basketRepository.create(dto)
@@ -21,6 +36,7 @@ export class BasketService {
 
     async getBasket(basketId: number) {
         const basket = await this.basketRepository.findByPk(basketId, { include: { all: true } })
+
         return basket
     }
 
@@ -33,7 +49,7 @@ export class BasketService {
         const product = await this.productService.getProductById(dto.productId)
         if (product && basket) {
             await basket.$add('products', product, { through: { quantity: dto.quantity } });
-            const basketnew = await this.getBasket(basket.id)
+            const basketnew = await this.getBasketItems(basket.id)
             return basketnew
         }
     }
@@ -58,4 +74,38 @@ export class BasketService {
             return basketnew
         }
     }
+
+    async getBasketItems(id: number) {
+        const basket = await this.basketRepository.findOne({
+            where: { id },
+            include: [{
+                model: Product,
+                through: {
+                    attributes: ['quantity'],
+                },
+            }],
+        });
+
+        const result: getBasketItemsResult = {
+
+            basketId: basket.id,
+            userId: basket.userId,
+            products: []
+        } as getBasketItemsResult
+
+        for (const product of basket.products) {
+            const basketProduct = product.get('BasketProduct') as { quantity: number }
+            result.products.push({
+                basketId: basket.id,
+                productId: product.id,
+                productName: product.name,
+                price: product.price,
+                quantity: basketProduct.quantity,
+                imagejpg: product.imagejpg,
+                imagewebp: product.imagewebp
+            });
+        }
+        return result
+    }
+
 }

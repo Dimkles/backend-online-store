@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { CategoryProduct } from "src/categories/category-product.model";
 import { Category } from "src/categories/categories.model";
 import { Order } from "src/orders/orders.model";
@@ -51,9 +51,6 @@ export class Product extends Model<Product, ProductsCreationAttrs> {
 
     @BelongsToMany(() => Order, () => OrderProduct)
     orders: Order[]
-
     @BelongsToMany(() => Basket, () => BasketProduct)
     baskets: Basket[]
-
-
 }
