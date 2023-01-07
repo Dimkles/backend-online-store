@@ -17,6 +17,11 @@ export class OrderProduct extends Model<OrderProduct> {
     @Column({ type: DataType.INTEGER })
     orderId: number
 
+    @BelongsTo(() => Product)
+    product: Product;
+
+    @BelongsTo(() => Order)
+    order: Order;
 
     @Column({ type: DataType.INTEGER })
     quantity: number

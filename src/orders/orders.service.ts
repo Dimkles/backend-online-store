@@ -1,14 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { BasketService } from 'src/basket/basket.service';
+import { Product } from 'src/products/products.model';
+import { ProductsService } from 'src/products/products.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './orders.model';
+export interface getOrderItemsResult {
+    orderId: number,
+    userId: number,
+    address: string
+    products: {
+        orderId: number
+        productId: number;
+        productName: string;
+        price: number;
+        quantity: number;
+        imagejpg: string
+        imagewebp: string
+    }[]
+}
 
 @Injectable()
 export class OrdersService {
 
     constructor(@InjectModel(Order) private orderRepository: typeof Order,
-        private basketService: BasketService) { }
+        private basketService: BasketService,
+        private productsService: ProductsService) { }
 
     async getOrderByPk(orderId: number) {
         const order = await this.orderRepository.findByPk(orderId, { include: { all: true } })
@@ -16,15 +33,14 @@ export class OrdersService {
     }
 
     async createOrder(dto: CreateOrderDto) {
-        const basket = await this.basketService.getBasket(dto.basketId)
+        const basket = await this.basketService.getBasketItems(dto.basketId)
         const order = await this.orderRepository.create({ ...dto, userId: basket.userId })
         if (basket.products && order) {
             await basket.products.forEach(async (product) => {
-                console.log(product)
-                const quantity = await this.basketService.getQuantityProduct(basket.id, product.id)
-                await order.$add('products', product.id, { through: { quantity } })
+                (await this.productsService.getProductById(product.productId)).quantity -= product.quantity
+                await order.$add('products', product.productId, { through: { quantity: product.quantity } })
             })
-            await this.basketService.removeAllProductFromBasket({ basketId: basket.id })
+            await this.basketService.removeAllProductFromBasket({ basketId: basket.basketId })
             return order
         }
     }
@@ -36,5 +52,38 @@ export class OrdersService {
             return order
         }
 
+    }
+
+    async getOrderItems(id: number) {
+        const order = await this.orderRepository.findOne({
+            where: { id },
+            include: [{
+                model: Product,
+                through: {
+                    attributes: ['quantity'],
+                },
+            }],
+        });
+
+        const result: getOrderItemsResult = {
+            address: order.address,
+            orderId: order.id,
+            userId: order.userId,
+            products: []
+        } as getOrderItemsResult
+
+        for (const product of order.products) {
+            const orderProduct = product.get('OrderProduct') as { quantity: number }
+            result.products.push({
+                orderId: order.id,
+                productId: product.id,
+                productName: product.name,
+                price: product.price,
+                quantity: orderProduct.quantity,
+                imagejpg: product.imagejpg,
+                imagewebp: product.imagewebp
+            });
+        }
+        return result
     }
 }
