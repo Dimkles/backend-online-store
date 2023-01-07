@@ -36,9 +36,11 @@ export class OrdersService {
         const basket = await this.basketService.getBasketItems(dto.basketId)
         const order = await this.orderRepository.create({ ...dto, userId: basket.userId })
         if (basket.products && order) {
-            await basket.products.forEach(async (product) => {
-                (await this.productsService.getProductById(product.productId)).quantity -= product.quantity
-                await order.$add('products', product.productId, { through: { quantity: product.quantity } })
+            await basket.products.forEach(async (item) => {
+                const product = await this.productsService.getProductById(item.productId)
+                product.quantity -= item.quantity
+                await product.save()
+                await order.$add('products', item.productId, { through: { quantity: item.quantity } })
             })
             await this.basketService.removeAllProductFromBasket({ basketId: basket.basketId })
             return order
