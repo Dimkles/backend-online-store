@@ -9,6 +9,7 @@ export interface getOrderItemsResult {
     orderId: number,
     userId: number,
     address: string
+    fullPrice: number
     products: {
         orderId: number
         productId: number;
@@ -71,11 +72,13 @@ export class OrdersService {
             address: order.address,
             orderId: order.id,
             userId: order.userId,
-            products: []
+            products: [],
+            fullPrice: 0
         } as getOrderItemsResult
 
         for (const product of order.products) {
             const orderProduct = product.get('OrderProduct') as { quantity: number }
+            result.fullPrice += product.price * orderProduct.quantity
             result.products.push({
                 orderId: order.id,
                 productId: product.id,

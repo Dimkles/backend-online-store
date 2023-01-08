@@ -12,6 +12,7 @@ import { RemoveProductDto } from './dto/remove-product.dto';
 export interface getBasketItemsResult {
     basketId: number,
     userId: number,
+    fullPrice: number
     products: {
         basketId: number
         productId: number;
@@ -87,14 +88,15 @@ export class BasketService {
         });
 
         const result: getBasketItemsResult = {
-
             basketId: basket.id,
             userId: basket.userId,
-            products: []
+            products: [],
+            fullPrice: 0
         } as getBasketItemsResult
 
         for (const product of basket.products) {
             const basketProduct = product.get('BasketProduct') as { quantity: number }
+            result.fullPrice += product.price * basketProduct.quantity
             result.products.push({
                 basketId: basket.id,
                 productId: product.id,
