@@ -23,7 +23,6 @@ export interface getOrderItemsResult {
 
 @Injectable()
 export class OrdersService {
-
     constructor(@InjectModel(Order) private orderRepository: typeof Order,
         private basketService: BasketService,
         private productsService: ProductsService) { }
