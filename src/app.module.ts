@@ -16,6 +16,12 @@ import { Category } from './categories/categories.model';
 import { Product } from './products/products.model';
 import { CategoryProduct } from './categories/category-product.model';
 import { Token } from './auth/token.model';
+import { BasketModule } from './basket/basket.module';
+import { OrdersModule } from './orders/orders.module';
+import { Basket } from './basket/basket.model';
+import { BasketProduct } from './basket/basket-product.model';
+import { Order } from './orders/orders.model';
+import { OrderProduct } from './orders/orders-products.model';
 
 @Module({
   imports: [
@@ -33,14 +39,16 @@ import { Token } from './auth/token.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, Token, UserRoles, Category, Product, CategoryProduct],
-      autoLoadModels: true
+      models: [User, Role, Token, UserRoles, Category, Product, CategoryProduct, Basket, BasketProduct, Order, OrderProduct],
+      autoLoadModels: true,
     }),
     UsersModule,
     RolesModule,
     AuthModule,
     FilesModule,
     CategoriesModule,
+    BasketModule,
+    OrdersModule,
 
   ],
   controllers: [],

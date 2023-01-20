@@ -1,15 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { CategoryProduct } from "src/categories/category-product.model";
 import { Category } from "src/categories/categories.model";
+import { Order } from "src/orders/orders.model";
+import { OrderProduct } from "src/orders/orders-products.model";
+import { Basket } from "src/basket/basket.model";
+import { BasketProduct } from "src/basket/basket-product.model";
 
 interface ProductsCreationAttrs {
     name: string
-    briefDescription: string
-    detailDescription: string
+    description: string
     link: string
     imagejpg: string
     imagewebp: string
+    quantity: number
 }
 
 @Table({ tableName: 'products' })
@@ -22,16 +26,17 @@ export class Product extends Model<Product, ProductsCreationAttrs> {
     @Column({ type: DataType.STRING, allowNull: false })
     name: string
 
-    @ApiProperty({ example: 'Какое-то описание', description: 'Краткое описание товара' })
+    @ApiProperty({ example: 'Какое-то описание', description: 'описание товара' })
     @Column({ type: DataType.TEXT, allowNull: false })
-    briefDescription: string
-    @ApiProperty({ example: 'Какое-то описание', description: 'Подробное описание товара' })
-    @Column({ type: DataType.TEXT, allowNull: false })
-    detailDescription: string
+    description: string
 
     @ApiProperty({ example: 1200, description: 'Цена' })
     @Column({ type: DataType.INTEGER, allowNull: false })
     price: number
+
+    @ApiProperty({ example: 12, description: 'Количество' })
+    @Column({ type: DataType.INTEGER, allowNull: false })
+    quantity: number
 
     @ApiProperty({ example: 'imageName.jpg', description: 'Изображение в формате jpg' })
     @Column({ type: DataType.STRING, allowNull: false })
@@ -43,4 +48,9 @@ export class Product extends Model<Product, ProductsCreationAttrs> {
 
     @BelongsToMany(() => Category, () => CategoryProduct)
     categories: Category[]
+
+    @BelongsToMany(() => Order, () => OrderProduct)
+    orders: Order[]
+    @BelongsToMany(() => Basket, () => BasketProduct)
+    baskets: Basket[]
 }

@@ -1,5 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BelongsToMany, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, DataType, HasMany, HasOne, Model, Table } from "sequelize-typescript";
+import { Basket } from "src/basket/basket.model";
+import { Order } from "src/orders/orders.model";
 import { Role } from "src/roles/roles.model";
 import { UserRoles } from "src/roles/user-roles.model";
 
@@ -7,6 +9,8 @@ import { UserRoles } from "src/roles/user-roles.model";
 interface UserCreationAttrs {
     email: string
     password: string
+    address: string
+    name: string
 }
 
 @Table({ tableName: 'users' })
@@ -31,7 +35,21 @@ export class User extends Model<User, UserCreationAttrs> {
     @Column({ type: DataType.STRING, allowNull: true })
     banReason: string
 
+    @ApiProperty({ example: 'г.Москва, ул.Пушкина, д.4, кв.4', description: 'Адрес пользователя' })
+    @Column({ type: DataType.STRING, allowNull: true })
+    address: string
+
+    @ApiProperty({ example: 'Дмитрий', description: 'Имя пользователя' })
+    @Column({ type: DataType.STRING, allowNull: true })
+    name: string
+
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[]
+
+    @HasOne(() => Basket)
+    basket: Basket;
+
+    @HasMany(() => Order)
+    orders: Order[]
 
 }

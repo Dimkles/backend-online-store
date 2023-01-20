@@ -23,10 +23,10 @@ export class UsersController {
 
     @ApiOperation({ summary: 'Получение всех пользователей' })
     @ApiResponse({ status: 200, type: [User] })
-    @UseGuards(JwtAuthGuard)
-    @Roles('ADMIN')
-    @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
+    // @Roles('ADMIN')
+    // @UseGuards(RolesGuard)
+    // @UseGuards(JwtAuthGuard)
     @Get()
     getAll() {
         return this.usersService.getAllUsers()
@@ -35,8 +35,8 @@ export class UsersController {
 
     @ApiOperation({ summary: 'Выдать роль' })
     @ApiResponse({ status: 200 })
-    @Roles('ADMIN')
-    @UseGuards(RolesGuard)
+    // @Roles('ADMIN')
+    // @UseGuards(RolesGuard)
     @Post('/role')
     addRole(@Body() dto: AddRoleDto) {
         return this.usersService.addRole(dto)

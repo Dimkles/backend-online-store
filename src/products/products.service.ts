@@ -45,8 +45,7 @@ export class ProductsService {
         product.imagewebp = fileName.imagewebp
         product.name = dto.name
         product.price = dto.price
-        product.briefDescription = dto.briefDescription
-        product.detailDescription = dto.detailDescription
+        product.description = dto.description
         product.$remove('categories', product.categories.map((category) => category.id))
         if (typeof dto.categories === 'string') {
             const categories = dto.categories.split(',')
