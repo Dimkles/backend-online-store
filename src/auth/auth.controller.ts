@@ -4,6 +4,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { Response, Request } from 'express'
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { LoginUserDto } from 'src/users/dto/login-user.dto';
 @ApiTags('Авторизация')
 @Controller('auth')
 export class AuthController {
@@ -12,7 +13,7 @@ export class AuthController {
 
     @ApiOperation({ summary: 'Вход' })
     @Post('/login')
-    login(@Body() userDto: CreateUserDto, @Res({ passthrough: true }) response: Response) {
+    login(@Body() userDto: LoginUserDto, @Res({ passthrough: true }) response: Response) {
         return this.authService.login(userDto, response)
     }
 

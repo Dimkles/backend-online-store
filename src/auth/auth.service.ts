@@ -7,6 +7,7 @@ import { User } from 'src/users/users.model';
 import { Response, Request } from 'express'
 import { InjectModel } from '@nestjs/sequelize';
 import { Token } from './token.model';
+import { LoginUserDto } from 'src/users/dto/login-user.dto';
 @Injectable()
 export class AuthService {
 
@@ -14,7 +15,7 @@ export class AuthService {
     constructor(private usersService: UsersService,
         private jwtService: JwtService, @InjectModel(Token) private tokenRepository: typeof Token) { }
 
-    async login(userDto: CreateUserDto, response: Response) {
+    async login(userDto: LoginUserDto, response: Response) {
         const user = await this.validateUser(userDto)
         const { refreshToken, accessToken } = await this.generateToken(user)
 
@@ -60,7 +61,7 @@ export class AuthService {
         return token
     }
 
-    private async validateUser(userDto: CreateUserDto) {
+    private async validateUser(userDto: LoginUserDto) {
         const user = await this.usersService.getUserByEmail(userDto.email)
         if (!user) throw new UnauthorizedException({ message: 'Некорректый email или пароль' })
         const passwordEquals = await bcrypt.compare(userDto.password, user.password)
