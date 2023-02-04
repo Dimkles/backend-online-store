@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles-auth.decorator';
@@ -27,8 +27,8 @@ export class ProductsController {
     @ApiOperation({ summary: 'Получение всех товаров' })
     @ApiResponse({ status: 200, type: [Product] })
     @Get()
-    getAllProduct() {
-        return this.productsService.getAllProducts()
+    getAllProduct(@Query('page') page = 1, @Query('pageSize') limit = 10) {
+        return this.productsService.getAllProducts(page, limit)
     }
 
     @ApiOperation({ summary: 'Получение одного товара по ID' })

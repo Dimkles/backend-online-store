@@ -9,9 +9,15 @@ import { Product } from './products.model';
 export class ProductsService {
     constructor(@InjectModel(Product) private productsRepositiry: typeof Product, private fileService: FilesService) { }
 
-    async getAllProducts() {
-        const products = await this.productsRepositiry.findAll({ include: { all: true } })
-        return products
+    async getAllProducts(page: number, limit: number) {
+        const startIndex = (page - 1) * limit
+        const totalItems = await this.productsRepositiry.count()
+        const products = await this.productsRepositiry.findAll({
+            include: { all: true },
+            offset: startIndex,
+            limit: limit
+        })
+        return { products, totalItems }
     }
 
     async getProductById(id: number) {
