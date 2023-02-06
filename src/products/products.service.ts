@@ -19,7 +19,6 @@ export class ProductsService {
         })
         return { products, totalItems }
     }
-
     async getProductById(id: number) {
         const product = await this.productsRepositiry.findByPk(id, { include: { all: true } })
         return product
