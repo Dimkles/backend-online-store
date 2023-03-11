@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Category } from 'src/categories/categories.model';
+import { CategoryProduct } from 'src/categories/category-product.model';
 import { FilesService } from 'src/files/files.service';
 import { CreateProductsDto } from './dto/create-products.dto';
 import { UpdateProductsDto } from './dto/update-products.dto';
@@ -14,6 +16,16 @@ export class ProductsService {
         const totalItems = await this.productsRepositiry.count()
         const products = await this.productsRepositiry.findAll({
             include: { all: true },
+            offset: startIndex,
+            limit: limit
+        })
+        return { products, totalItems }
+    }
+    async getCategoryIdProducts(page: number, limit: number, categoryId: number) {
+        const startIndex = (page - 1) * limit
+        const totalItems = await this.productsRepositiry.count()
+        const products = await this.productsRepositiry.findAll({
+            include: [{ model: Category, where: { id: categoryId } }],
             offset: startIndex,
             limit: limit
         })
