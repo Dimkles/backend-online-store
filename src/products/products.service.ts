@@ -23,7 +23,9 @@ export class ProductsService {
     }
     async getCategoryIdProducts(page: number, limit: number, categoryId: number) {
         const startIndex = (page - 1) * limit
-        const totalItems = await this.productsRepositiry.count()
+        const totalItems = await this.productsRepositiry.count({
+            include: [{ model: Category, where: { id: categoryId } }],
+        })
         const products = await this.productsRepositiry.findAll({
             include: [{ model: Category, where: { id: categoryId } }],
             offset: startIndex,
