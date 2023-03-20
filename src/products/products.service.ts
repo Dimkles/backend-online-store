@@ -11,17 +11,30 @@ import { Product } from './products.model';
 export class ProductsService {
     constructor(@InjectModel(Product) private productsRepositiry: typeof Product, private fileService: FilesService) { }
 
-    async getAllProducts(page: number, limit: number) {
+    async getAllProducts(page: number, limit: number, categoryId: number) {
+        if (categoryId == 0) {
+            const startIndex = (page - 1) * limit
+            const totalItems = await this.productsRepositiry.count()
+            const products = await this.productsRepositiry.findAll({
+                include: { all: true },
+                offset: startIndex,
+                limit: limit
+            })
+            return { products, totalItems }
+        }
         const startIndex = (page - 1) * limit
-        const totalItems = await this.productsRepositiry.count()
+        const totalItems = await this.productsRepositiry.count({
+            include: [{ model: Category, where: { id: categoryId } }],
+        })
         const products = await this.productsRepositiry.findAll({
-            include: { all: true },
+            include: [{ model: Category, where: { id: categoryId } }],
             offset: startIndex,
             limit: limit
         })
         return { products, totalItems }
+
     }
-    async getCategoryIdProducts(page: number, limit: number, categoryId: number) {
+    async getCategoryIdProducts(page: number, limit: number, categoryId?: number) {
         const startIndex = (page - 1) * limit
         const totalItems = await this.productsRepositiry.count({
             include: [{ model: Category, where: { id: categoryId } }],

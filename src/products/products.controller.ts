@@ -27,8 +27,8 @@ export class ProductsController {
     @ApiOperation({ summary: 'Получение всех товаров' })
     // @ApiResponse({ status: 200, type: [Product] })
     @Get()
-    getAllProduct(@Query('page') page = 1, @Query('limit') limit = 10) {
-        return this.productsService.getAllProducts(page, limit)
+    getAllProduct(@Query('page') page = 1, @Query('limit') limit = 10, @Query('categoryId') categoryId: number) {
+        return this.productsService.getAllProducts(page, limit, categoryId)
     }
 
     @ApiOperation({ summary: 'Получение всех товаров' })
